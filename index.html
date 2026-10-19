@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Знайомство з інтерфейсом Excel — Тест</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        excel: {
+                            dark: '#107c41',
+                            primary: '#185abd',
+                            green: '#107c41',
+                            lightGreen: '#e1f3ea',
+                            accent: '#107c41',
+                            bg: '#f3f2f1',
+                            header: '#0f6cbd'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f6f8;
+        }
+        .excel-grid {
+            background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .custom-radio:checked + label {
+            border-color: #107c41;
+            background-color: #f0fdf4;
+        }
+        .custom-radio:checked + label .radio-circle {
+            border-color: #107c41;
+            background-color: #107c41;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-gray-800 excel-grid">
+
+    <!-- Header Bar in Excel Ribbon Style -->
+    <header class="bg-[#107c41] text-white shadow-md">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white text-[#107c41] p-2 rounded-lg font-bold text-xl shadow">
+                    <i class="fa-solid font-bold">X</i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide">Знайомство з інтерфейсом Excel</h1>
+                    <p class="text-xs text-green-100">Інтерактивне тестування • 20 запитань</p>
+                </div>
+            </div>
+            <button id="restart-header-btn" onclick="restartQuiz()" class="hidden sm:flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white text-sm py-1.5 px-3 rounded transition shadow-sm">
+                <i class="fa-solid fa-rotate-right"></i> Спочатку
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-4xl w-full mx-auto p-4 md:p-6 my-4">
+        
+        <!-- START SCREEN -->
+        <div id="start-card" class="bg-white rounded-xl shadow-lg p-6 md:p-10 border border-gray-200 text-center">
+            <div class="w-20 h-20 bg-emerald-100 text-[#107c41] rounded-full flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner">
+                <i class="fa-solid fa-file-excel"></i>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">Готові перевірити свої знання з Excel?</h2>
+            <p class="text-gray-600 mb-8 max-w-xl mx-auto">
+                Цей тест допоможе визначити, наскільки добре ви орієнтуєтеся в базовому інтерфейсі, термінології та елементах керування табличного редактора Microsoft Excel.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-left max-w-2xl mx-auto">
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 flex items-center gap-3">
+                    <i class="fa-solid fa-list-check text-emerald-600 text-xl"></i>
+                    <div>
+                        <div class="text-xs text-gray-500">Кількість</div>
+                        <div class="font-semibold text-gray-800">20 запитань</div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 flex items-center gap-3">
+                    <i class="fa-solid fa-clock text-emerald-600 text-xl"></i>
+                    <div>
+                        <div class="text-xs text-gray-500">Час</div>
+                        <div class="font-semibold text-gray-800">Необмежений</div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 flex items-center gap-3">
+                    <i class="fa-solid fa-[#107c41] text-emerald-600 text-xl"></i>
+                    <div>
+                        <div class="text-xs text-gray-500">Оцінювання</div>
+                        <div class="font-semibold text-gray-800">Відсоток %</div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="startQuiz()" class="w-full md:w-auto px-8 py-3.5 bg-[#107c41] hover:bg-[#0d6334] text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5 text-lg">
+                Розпочати тест <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div id="quiz-card" class="hidden bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <!-- Progress Bar Header -->
+            <div class="bg-gray-50 border-b border-gray-200 p-4 md:px-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span id="question-progress-text" class="text-sm font-semibold text-gray-600">Питання 1 з 20</span>
+                    <span id="score-tracker" class="text-xs font-medium bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">Прогрес: 0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                    <div id="progress-bar" class="bg-[#107c41] h-2.5 rounded-full transition-all duration-300" style="width: 5%"></div>
+                </div>
+            </div>
+
+            <!-- Question & Answers Body -->
+            <div class="p-6 md:p-8">
+                <h3 id="question-text" class="text-lg md:text-xl font-bold text-gray-800 mb-6 leading-relaxed">
+                    Завантаження питання...
+                </h3>
+
+                <!-- Options -->
+                <div id="options-container" class="space-y-3 mb-8">
+                    <!-- Options injected via JavaScript -->
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-gray-100">
+                    <button id="prev-btn" onclick="prevQuestion()" class="w-full sm:w-auto px-5 py-2.5 text-gray-600 bg-gray-100 hover:bg-gray-200 font-medium rounded-lg transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Назад
+                    </button>
+                    
+                    <button id="next-btn" onclick="nextQuestion()" class="w-full sm:w-auto px-6 py-2.5 bg-[#107c41] hover:bg-[#0d6334] text-white font-medium rounded-lg transition shadow-md">
+                        Далі <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-card" class="hidden bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-10 text-center">
+            <div class="mb-6">
+                <span class="inline-block p-4 rounded-full bg-emerald-50 text-[#107c41] text-4xl mb-2 shadow-inner">
+                    <i class="fa-solid fa-award"></i>
+                </span>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Тест завершено!</h2>
+                <p class="text-gray-500 text-sm mt-1">Ось ваші результати тестування з інтерфейсу Excel</p>
+            </div>
+
+            <!-- Score Stats Box -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto mb-8">
+                <div class="p-5 bg-emerald-50 rounded-xl border border-emerald-100 flex flex-col items-center">
+                    <span class="text-xs uppercase tracking-wider text-emerald-800 font-bold mb-1">Відсоток успішності</span>
+                    <span id="final-percentage" class="text-4xl font-extrabold text-[#107c41]">0%</span>
+                </div>
+                <div class="p-5 bg-blue-50 rounded-xl border border-blue-100 flex flex-col items-center">
+                    <span class="text-xs uppercase tracking-wider text-blue-800 font-bold mb-1">Правильних відповідей</span>
+                    <span id="final-score" class="text-4xl font-extrabold text-blue-600">0 / 20</span>
+                </div>
+                <div class="p-5 bg-purple-50 rounded-xl border border-purple-100 flex flex-col items-center">
+                    <span class="text-xs uppercase tracking-wider text-purple-800 font-bold mb-1">Оцінка</span>
+                    <span id="final-grade-badge" class="text-lg font-bold text-purple-700 mt-2 px-3 py-1 bg-purple-100 rounded-full">Незнято</span>
+                </div>
+            </div>
+
+            <!-- Summary Text Message -->
+            <div id="result-message-box" class="p-4 rounded-lg bg-gray-50 border border-gray-200 max-w-2xl mx-auto mb-8 text-gray-700 font-medium text-center">
+                <!-- Result message will go here -->
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 mb-10">
+                <button onclick="restartQuiz()" class="px-6 py-3 bg-[#107c41] hover:bg-[#0d6334] text-white font-semibold rounded-lg shadow transition">
+                    <i class="fa-solid fa-rotate-right mr-2"></i> Пройти тест знову
+                </button>
+                <button onclick="toggleReview()" id="review-btn" class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition">
+                    <i class="fa-solid fa-magnifying-glass mr-2"></i> Розбір відповідей
+                </button>
+            </div>
+
+            <!-- Detailed Answers Review -->
+            <div id="review-container" class="hidden text-left border-t border-gray-200 pt-8 mt-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-check text-emerald-600"></i> Детальний аналіз ваших відповідей:
+                </h3>
+                <div id="review-list" class="space-y-4">
+                    <!-- Dynamic review cards -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500 mt-auto">
+        <p>Інтерактивний навчальний тест «Знайомство з інтерфейсом Excel»</p>
+    </footer>
+
+    <!-- JavaScript Quiz Logic -->
+    <script>
+        // Quiz Questions Data (20 Questions)
+        const quizQuestions = [
+            {
+                question: "Для чого найчастіше використовується програма Microsoft Excel?",
+                options: [
+                    "Для створення та редагування текстових документів",
+                    "Для роботи з електронними таблицями та проведення розрахунків",
+                    "Для створення векторних ілюстрацій та графіки",
+                    "Для монтування та редагування відеофайлів"
+                ],
+                correct: 1
+            },
+            {
+                question: "Як стандартно називається документ, створений у програмі Microsoft Excel?",
+                options: [
+                    "Документ",
+                    "Презентація",
+                    "Книга",
+                    "Блокнот"
+                ],
+                correct: 2
+            },
+            {
+                question: "Який базовий та найменший елемент структури робочого аркуша Excel?",
+                options: [
+                    "Стовпець",
+                    "Рядок",
+                    "Комірка",
+                    "Вкладка"
+                ],
+                correct: 2
+            },
+            {
+                question: "Яку інформацію можна записати в окрему комірку Excel?",
+                options: [
+                    "Тільки цифри та числа",
+                    "Тільки формули",
+                    "Тільки текстову інформацію",
+                    "Числа, текст та формули"
+                ],
+                correct: 3
+            },
+            {
+                question: "За допомогою якої кнопки на стрічці можна об'єднати декілька виділених комірок у одну?",
+                options: [
+                    "«Об'єднати та розташувати в центрі»",
+                    "«Згрупувати об'єкти»",
+                    "«Зв'язати комірки»",
+                    "«Склеїти текст»"
+                ],
+                correct: 0
+            },
+            {
+                question: "Де на стрічці розташовані інструменти для вирівнювання тексту в комірці?",
+                options: [
+                    "На вкладці «Основне» в групі «Вирівнювання»",
+                    "На вкладці «Вставка» в групі «Таблиці»",
+                    "На вкладці «Вигляд» в групі «Масштаб»",
+                    "На вкладці «Дані» в групі «Сортування»"
+                ],
+                correct: 0
+            },
+            {
+                question: "Як додати або змінити границі (межі) для виділеної таблиці чи комірок?",
+                options: [
+                    "Використати кнопку «Межі» в групі «Шрифт» на вкладці «Основне»",
+                    "Натиснути кнопку «Контур» на вкладці «Формули»",
+                    "Клацнути на вкладку «Макет» та вибрати «Рамки»",
+                    "Межі таблиці додаються автоматично і їх не можна змінити"
+                ],
+                correct: 0
+            },
+            {
+                question: "Як позначаються стовпці у стандартному інтерфейсі Excel?",
+                options: [
+                    "Числами (1, 2, 3...)",
+                    "Латинськими літерами (A, B, C...)",
+                    "Римськими цифрами (I, II, III...)",
+                    "Спеціальними символами (!, #, $...)"
+                ],
+                correct: 1
+            },
+            {
+                question: "Як позначаються рядки у робочому аркуші Excel?",
+                options: [
+                    "Латинськими літерами (A, B, C...)",
+                    "Грецькими літерами (α, β, γ...)",
+                    "Числами (1, 2, 3...)",
+                    "Назвами місяців"
+                ],
+                correct: 2
+            },
+            {
+                question: "З чого складається адреса (ім'я) активної комірки в Excel?",
+                options: [
+                    "З номера рядка та імені стовпця (наприклад, 5B)",
+                    "З імені стовпця та номера рядка (наприклад, B5)",
+                    "Лише з номера рядка",
+                    "З назви робочого аркуша без цифр"
+                ],
+                correct: 1
+            },
+            {
+                question: "Де у вікні Excel можна побачити вміст комірки або ввести/відредагувати формулу?",
+                options: [
+                    "У рядку стану",
+                    "У панелі швидкого доступу",
+                    "У рядку формул",
+                    "У заголовку вікна"
+                ],
+                correct: 2
+            },
+            {
+                question: "З якого символу ОБОВ'ЯЗКОВО має починатися запис будь-якої формули в Excel?",
+                options: [
+                    "Зі знака долара ($)",
+                    "Зі знака рівності (=)",
+                    "З решітки (#)",
+                    "З двокрапки (:)"
+                ],
+                correct: 1
+            },
+            {
+                question: "Як додати новий робочий аркуш до поточної книги Excel?",
+                options: [
+                    "Натиснути кнопку «+» поруч із ярличками існуючих аркушів",
+                    "Натиснути клавішу Spacebar на клавіатурі",
+                    "Двічі клацнути мишею на будь-яку порожню комірку",
+                    "Закрити та знову відкрити програму Excel"
+                ],
+                correct: 0
+            },
+            {
+                question: "Що таке «маркер автозаповнення» і де він розташований?",
+                options: [
+                    "Червона крапка у верхньому лівому куті комірки",
+                    "Маленький чорний квадрат у правому нижньому куті виділеної комірки",
+                    "Зелена стрілка у рядку формул",
+                    "Курсор миші у вигляді білого хрестика"
+                ],
+                correct: 1
+            },
+            {
+                question: "Яке сполучення клавіш дозволяє швидко зберегти зміни у робочій книзі Excel?",
+                options: [
+                    "Ctrl + C",
+                    "Ctrl + Z",
+                    "Ctrl + S",
+                    "Ctrl + P"
+                ],
+                correct: 2
+            },
+            {
+                question: "Що означає поява символів ##### у комірці після введення числа або розрахунку?",
+                options: [
+                    "У формулі зроблено критичну математичну помилку",
+                    "Комірка містить заблокований текст",
+                    "Ширина стовпця замала для відображення всього числа",
+                    "Файл Excel пошкоджено"
+                ],
+                correct: 2
+            },
+            {
+                question: "Для чого призначене поле «Ім'я» (Name Box), розташоване ліворуч від рядка формул?",
+                options: [
+                    "Для відображення адреси виділеної комірки або швидкого переходу до неї",
+                    "Для підрахунку загальної кількості слів у документі",
+                    "Для введення імені автора документа",
+                    "Для відображення часу створення таблиці"
+                ],
+                correct: 0
+            },
+            {
+                question: "Як змінити назву робочого аркуша (наприклад, замість «Аркуш1» написати «Звіт»)?",
+                options: [
+                    "Двічі клацнути лівою кнопкою миші на ярличок аркуша та ввести нову назву",
+                    "Перетягнути ярличок аркуша в кошик",
+                    "Натиснути сполучення клавіш Alt + F4",
+                    "Назву аркуша змінити неможливо"
+                ],
+                correct: 0
+            },
+            {
+                question: "Що таке «діапазон комірок» у табличному редакторі Excel?",
+                options: [
+                    "Всі комірки, що містять від'ємні числа",
+                    "Група виділених комірок, що утворюють прямокутну область",
+                    "Відстань між двома суміжними стовпцями",
+                    "Максимальний розмір аркуша в сантиметрах"
+                ],
+                correct: 1
+            },
+            {
+                question: "Де розташований «Рядок стану» в інтерфейсі програми Microsoft Excel?",
+                options: [
+                    "У найнижчій частині вікна програми",
+                    "У найвищій частині вікна над стрічкою",
+                    "Праворуч від вертикальної смуги прокручування",
+                    "Всередині кожної активної комірки"
+                ],
+                correct: 0
+            }
+        ];
+
+        // Quiz State Variables
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizQuestions.length).fill(null);
+
+        // DOM Elements
+        const startCard = document.getElementById('start-card');
+        const quizCard = document.getElementById('quiz-card');
+        const resultCard = document.getElementById('result-card');
+        
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const questionProgressText = document.getElementById('question-progress-text');
+        const scoreTracker = document.getElementById('score-tracker');
+        const progressBar = document.getElementById('progress-bar');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Start Quiz Function
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizQuestions.length).fill(null);
+            
+            startCard.classList.add('hidden');
+            resultCard.classList.add('hidden');
+            quizCard.classList.remove('hidden');
+
+            renderQuestion();
+        }
+
+        // Render Current Question
+        function renderQuestion() {
+            const q = quizQuestions[currentQuestionIndex];
+            
+            // Question text
+            questionText.textContent = `${currentQuestionIndex + 1}. ${q.question}`;
+            
+            // Options HTML
+            optionsContainer.innerHTML = '';
+            q.options.forEach((opt, index) => {
+                const isChecked = userAnswers[currentQuestionIndex] === index;
+                
+                const optionWrapper = document.createElement('div');
+                optionWrapper.className = 'relative';
+                
+                optionWrapper.innerHTML = `
+                    <input type="radio" id="opt-${index}" name="quiz-option" value="${index}" ${isChecked ? 'checked' : ''} class="custom-radio sr-only" onchange="selectOption(${index})">
+                    <label for="opt-${index}" class="flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/50 transition duration-150">
+                        <div class="radio-circle w-5 h-5 rounded-full border-2 border-gray-300 mr-3 flex items-center justify-center flex-shrink-0 transition">
+                            <div class="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                        <span class="text-sm md:text-base text-gray-700 font-medium">${opt}</span>
+                    </label>
+                `;
+                optionsContainer.appendChild(optionWrapper);
+            });
+
+            // Update Progress Header
+            questionProgressText.textContent = `Питання ${currentQuestionIndex + 1} з ${quizQuestions.length}`;
+            
+            const answeredCount = userAnswers.filter(a => a !== null).length;
+            const progressPercent = Math.round((answeredCount / quizQuestions.length) * 100);
+            scoreTracker.textContent = `Заповнено: ${progressPercent}%`;
+            progressBar.style.width = `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%`;
+
+            // Navigation Buttons State
+            prevBtn.disabled = currentQuestionIndex === 0;
+
+            if (currentQuestionIndex === quizQuestions.length - 1) {
+                nextBtn.innerHTML = `Завершити тест <i class="fa-solid fa-check ml-2"></i>`;
+                nextBtn.className = "w-full sm:w-auto px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition shadow-md";
+            } else {
+                nextBtn.innerHTML = `Далі <i class="fa-solid fa-arrow-right ml-2"></i>`;
+                nextBtn.className = "w-full sm:w-auto px-6 py-2.5 bg-[#107c41] hover:bg-[#0d6334] text-white font-medium rounded-lg transition shadow-md";
+            }
+        }
+
+        // Option selection handler
+        function selectOption(index) {
+            userAnswers[currentQuestionIndex] = index;
+            renderQuestion();
+        }
+
+        // Next Question or Finish
+        function nextQuestion() {
+            if (userAnswers[currentQuestionIndex] === null) {
+                // Flash alert if answer not chosen
+                const label = document.querySelector('label');
+                if(label) {
+                    alert('Будь ласка, оберіть відповідь перед тим, як продовжити!');
+                }
+                return;
+            }
+
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        // Previous Question
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        // Calculate and Finish Quiz
+        function finishQuiz() {
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correct) {
+                    correctCount++;
+                }
+            });
+
+            const percentage = Math.round((correctCount / quizQuestions.length) * 100);
+
+            // Hide Quiz, Show Results
+            quizCard.classList.add('hidden');
+            resultCard.classList.remove('hidden');
+
+            // Set DOM values
+            document.getElementById('final-percentage').textContent = `${percentage}%`;
+            document.getElementById('final-score').textContent = `${correctCount} / ${quizQuestions.length}`;
+
+            // Grade badge & message
+            const gradeBadge = document.getElementById('final-grade-badge');
+            const messageBox = document.getElementById('result-message-box');
+
+            if (percentage >= 90) {
+                gradeBadge.textContent = "Відмінно! 🏆";
+                gradeBadge.className = "text-lg font-bold text-emerald-700 px-4 py-1.5 bg-emerald-100 rounded-full";
+                messageBox.innerHTML = "🎉 <b class='text-emerald-700'>Чудовий результат!</b> Ви прекрасно орієнтуєтеся в інтерфейсі та базових поняттях Microsoft Excel. Продовжуйте в тому ж дусі!";
+            } else if (percentage >= 70) {
+                gradeBadge.textContent = "Добре! 👍";
+                gradeBadge.className = "text-lg font-bold text-blue-700 px-4 py-1.5 bg-blue-100 rounded-full";
+                messageBox.innerHTML = "✨ <b class='text-blue-700'>Гарний результат!</b> Ви володієте більшістю необхідних знань. Перегляньте розбір помилок, щоб довести знання до ідеалу.";
+            } else if (percentage >= 50) {
+                gradeBadge.textContent = "Задовільно 😐";
+                gradeBadge.className = "text-lg font-bold text-amber-700 px-4 py-1.5 bg-amber-100 rounded-full";
+                messageBox.innerHTML = "💡 <b class='text-amber-700'>Базовий рівень.</b> Ви маєте основне уявлення про Excel, але деякі теми варто повторити ще раз.";
+            } else {
+                gradeBadge.textContent = "Потрібно повторити 📚";
+                gradeBadge.className = "text-lg font-bold text-rose-700 px-4 py-1.5 bg-rose-100 rounded-full";
+                messageBox.innerHTML = "⚠️ <b class='text-rose-700'>Потрібно більше практики.</b> Рекомендуємо уважно ознайомитися з інтерфейсом Excel та пройти тест знову.";
+            }
+
+            // Build Review Cards
+            buildReviewList();
+        }
+
+        // Build Review Section
+        function buildReviewList() {
+            const reviewList = document.getElementById('review-list');
+            reviewList.innerHTML = '';
+
+            quizQuestions.forEach((q, idx) => {
+                const userChoice = userAnswers[idx];
+                const isCorrect = userChoice === q.correct;
+
+                const item = document.createElement('div');
+                item.className = `p-4 md:p-5 rounded-lg border ${isCorrect ? 'bg-emerald-50/60 border-emerald-200' : 'bg-rose-50/60 border-rose-200'}`;
+
+                item.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="mt-0.5 text-lg flex-shrink-0">
+                            ${isCorrect ? '<i class="fa-solid fa-circle-check text-emerald-600"></i>' : '<i class="fa-solid fa-circle-xmark text-rose-600"></i>'}
+                        </div>
+                        <div class="w-full">
+                            <div class="font-semibold text-gray-800 text-sm md:text-base mb-2">
+                                ${idx + 1}. ${q.question}
+                            </div>
+                            <div class="text-xs md:text-sm space-y-1">
+                                <div class="${isCorrect ? 'text-emerald-800 font-medium' : 'text-rose-700 font-medium'}">
+                                    Ваша відповідь: ${userChoice !== null ? q.options[userChoice] : 'Немає відповіді'}
+                                </div>
+                                ${!isCorrect ? `
+                                    <div class="text-emerald-700 font-semibold">
+                                        Правильна відповідь: ${q.options[q.correct]}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                reviewList.appendChild(item);
+            });
+        }
+
+        // Toggle Review Container visibility
+        function toggleReview() {
+            const container = document.getElementById('review-container');
+            const btn = document.getElementById('review-btn');
+            
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                btn.innerHTML = `<i class="fa-solid fa-eye-slash mr-2"></i> Сховати розбір`;
+                container.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                container.classList.add('hidden');
+                btn.innerHTML = `<i class="fa-solid fa-magnifying-glass mr-2"></i> Розбір відповідей`;
+            }
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            document.getElementById('review-container').classList.add('hidden');
+            document.getElementById('review-btn').innerHTML = `<i class="fa-solid fa-magnifying-glass mr-2"></i> Розбір відповідей`;
+            startQuiz();
+        }
+    </script>
+</body>
+</html>
